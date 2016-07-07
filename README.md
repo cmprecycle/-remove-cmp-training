@@ -6,6 +6,9 @@ training for cmp with playground
 * Download Git-SCM at https://git-scm.com/downloads
 * the script will download cmp and make an example
 
+# Traninig Book
+https://www.gitbook.com/book/cmptech/cmp-training/
+
 # Usage Windows
 
 ```
