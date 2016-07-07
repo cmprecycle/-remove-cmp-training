@@ -1,0 +1,11 @@
+=关于RB要做的事
+持续同步 RedBeanPHP 4的代码（但要做patch）。有机会参与 RB 的GITHUB代码。
+
+每次同步要注意
+NonStaticFacade代码
+SQLite的 Date/DateTime 类型
+
+** 为什么不能把数据类型都简化为 DATE/DATETIME/NUMERIC/INTEGER/TEXT 就OK了?
+
+#http://redbeanphp.com/Download
+After downloading run replica.php to assemble the all-in-one package.

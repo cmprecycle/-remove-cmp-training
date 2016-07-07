@@ -1,0 +1,293 @@
+<script src="../weblib/jquery-1.9.1.min.js"></script>
+<script src="../weblib/src.common.js"></script>
+<script src="../weblib/src.content.js"></script>
+<link rel="stylesheet" type="text/css" href="../weblib/jqeasyui1.4/themes/gray/easyui.css">
+<link rel="stylesheet" type="text/css" href="../weblib/jqeasyui1.4/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../weblib/jqeasyui1.4/themes/color.css">
+<script type="text/javascript" src="../weblib/jqeasyui1.4/jquery.easyui.min.js"></script>
+<script src="../weblib/src.easyui.mgdefault.js"></script>
+<script src="../weblib/src.mg.aj.2014.js"></script>
+<script src="../weblib/src.mg_core.js"></script>
+<script src="../weblib/src.async.js"></script>
+<script src="../weblib/src.mgrender2014.js"></script>
+<script src="../weblib/src.SaasTool.js"></script>
+<script src="../weblib/src.mgSimpleGrid.20150105.js"></script>
+<script src="../weblib/src.mgSimpleDlg.20141215.js"></script>
+
+<meta charset="utf-8">
+<style>
+	#NoteList td{width:140px;}
+</style>
+<body>
+	<script>
+		/*	//$.parser.parse();
+		setTimeout(function(){
+			$("#divTestWJC").html('<a id="btnListNew" href="javascript:void(0);" class="easyui-linkbutton" >Test</a>');
+			//$.parser.parse("#divTestWJC");
+		},2000);
+	*/
+	</script>
+	<h3>EASYUI EXAMPLE</h3>
+	<div id="div_list">
+		<a id="btnListNew" href="javascript:void(0);" class="easyui-linkbutton" >Test</a><br>
+		<div id="divGrid" style="width:100%"></div>
+		<div id="divDlg" style="width:100%"></div>
+	</div>
+	<script id="tplCURD" class="nodisplay" type="text/mgtpl">
+	<div class="easyui-dialog"  style="width:400px;padding:10px 20px">
+		<form method="post">
+			<table width="100%">
+				<tr>
+					<td><font class="fitem_label">ID:</font></td>
+					<td><input name="id" class="easyui-textbox" readonly="true"></td>
+				</tr>
+				<tr>
+					<td><font class="fitem_label">note_key:</font></td>
+					<td><input name="note_key" id="text" class="easyui-textbox"><input type="hidden" name="note_status"></td>
+				</tr>
+        		<tr>
+					<td><font class="fitem_label">note_remark:</font></td>
+					<td><input name="note_remark" class="easyui-textbox"></td>
+				</tr>
+     		</table>
+     	</form>
+	</div>
+</script>
+	<script id="tplMultiDelete" class="nodisplay" type="text/mgtpl">
+	<div class="easyui-dialog" style="width:400px;padding:10px 20px">
+		<form method="post">
+			<table width="100%">
+				<tr>
+					<td>ID</td>
+				</tr>
+				<tr>
+					<td><input name="id" class="easyui-textbox" readonly='readonly'></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</script>
+	<h3>JQuery + EasyUI =&gt; ApiXXX =&gt; LgcXXX =&gt; OrmXXX</h3>
+	<ul>
+		<li><a href="javascript:TestPingPong();">Test ApiDemo.PingPong.api</a></li>
+		<li><a href="javascript:AddTestNote();">Add TestNote</a></li>
+		<!--		<li><a href="javascript:UpdateTestNote();">Update TestNote</a></li>-->
+		<li><a href="javascript:ListTestNote();">List TestNote</a></li>
+	</ul>
+	Send<div id="divSend"></div>
+	Receive<div id="divReceive"></div>
+	Debug<div id="divDebug"></div>
+	<table id="NoteList" border=1 cellpadding="0" cellspacing='0'>
+		<thead>
+			<tr><td>id</td><td>NoteKey</td><td>Remark</td><td>Action</td></tr>
+		</thead>
+		<tbody id="NoteBody">
+		</tbody>
+	</table>
+	
+	<script>
+	
+	//EASY UI
+		var _toolbar={
+			"Reload":{title:"Reload"}
+			,"Add":{
+				title:"Add"
+				,onClick:function(o){
+					//TODO 新建CRUD_DLG，然后确认后远程opt，再返回之后就...
+					//要在这里写进去远程opt入口，和处理函数
+					var dlg=new mgSimpleDlg({
+						//wintitle:'Add HO',//如果隐藏则使用action
+						values:{"note_status":"0"},//[初始值]
+						a:o.a,//[事件来源]:影响出现的位置.
+						tpl_id:'tplCURD',
+						target_id:'divDlg',//目标div
+						_c:'ApiDemo',_m:'SaveTestNote',//<Remote for the action>
+						action: 'Add',//<对应动作>
+						//onBeforeConfirm:_beforeConfirm,//submit前数据的验证
+						onCallback: function(){		
+							grid_user.reload();
+						},
+					});
+					return true;
+					}
+				}
+			};
+	//初始化一个easy ui 对象
+		var grid_user = new mgSimpleGrid({
+			targetDivId: "divGrid"//目标操作区.
+			, fMultiAction: true
+							//,iActionWidth:250
+			, pageSize: 20
+			, data_opt: {_c: "ApiDemo", _m: "ListTestNote"}
+			//			,filterPanelId:'tplFilter'//内嵌方式，用模板.
+			//			,fShowFilterPanel:true
+			,actionFormatter:function(cellValue,row,index){
+				var rt=""; 
+				if(!row) return rt;
+				rt+=clsSimpleGrid.create_action(index,'Edit',"Edit");
+				rt+=clsSimpleGrid.create_action(index,'Delete',"Delete");
+				return rt;
+		}
+		,ToolBar:_toolbar
+		, options: {
+				rownumbers: true
+				, fitColumns: true
+			}
+		});
+		//绑定action
+		$(grid_user).on('RowAction',function(evt,o){
+			if(!o) return false;
+			switch(o.action){
+				case 'Edit':
+				$("#tplCURD").find("div:eq(0)").addClass("easyui-dialog");
+				var dlg=new mgSimpleDlg({
+					//wintitle:'Edit',//如果隐藏则使用action
+					values:o.rowdata//[初始值]
+					,a:o.a//[事件来源]:影响出现的位置.
+					,tpl_id:'tplCURD'
+					,target_id:'divDlg'//目标div
+					,_c:'ApiDemo',_m:'SaveTestNote'//<Remote for the action>
+					,action: 'Edit'//<对应动作>
+					//,onBeforeConfirm:_beforeConfirm//submit前数据的验证
+					,onCallback:_callback_dlg_default
+				});
+				break;
+				case 'Delete':
+				var dlg=new mgSimpleDlg({
+					wintitle:'Confirm Delete'//如果隐藏则使用action
+					,values:{id:o.rowdata.id}//[初始值]
+					,a:o.a//[事件来源]:影响出现的位置.
+					,tpl_id:'tplMultiDelete'
+					,target_id:'divDlg'//目标div
+					,_c:'ApiDemo',_m:'DeleteTestNote'//<Remote for the action>
+					,button_name:'Confirm'//如果隱藏就會用action
+					,action: 'Delete'//<对应动作>
+					,onCallback:_callback_dlg_default
+				});
+				break;
+				default:break;
+			}
+		});
+		function TestReview(o) {
+			$("#divDebug").innerHTML = o2s(o);
+		}
+		function TestPingPong() {
+			var _send_o = {ping: (new Date()).getTime() / 1000};
+			aj2014({
+				_c: 'ApiDemo',
+				_m: "PingPong",
+				_p: _send_o,
+				onCallback: function(o) {
+					$("#divReceive").html(o2s(o));
+				}
+			});
+		}
+		function AddTestNote() {
+			var tr = document.createElement("tr");
+			tr.innerHTML = "<td></td><td><input type='text' id='note_key'></td><td><input type='text' id='note_remark'></td>\n\
+				<td><input type='button' value='Save' onclick='SaveTestNote(this)'/><input type='button' value='Cancel' onclick='Cancel(this);'/></td>";
+			//把tr追加到表格里面
+			$("#NoteBody").append(tr);
+		}
+		function ListTestNote() {
+			//	var url="ApiDemo.ListTestNote.api?lang={$lang}";
+			aj2014({
+				_c: 'ApiDemo',
+				_m: "ListTestNote",
+				onCallback: function(o) {
+					var html = "";
+					for (var i in o.table_data) {
+						var row = o.table_data[i];
+						html += "<tr id='" + row['id'] + "'><td>" + row['id'] + "</td><td>" + row['note_key'] + "</td><td>" + row['note_remark'] + "</td>\n\
+							<td><input type='button' value='修改' onclick='EditRow(this)'/><input type='button' value='删除' onclick='DeleteRow(this)'/></td></tr>";
+					}
+					$("#NoteBody").html(html);
+				}
+			});
+		}
+		function SaveTestNote(obj) {
+			//要保存的数据
+			var _data = {"note_key": $("#note_key").val(), "note_remark": $("#note_remark").val()};
+			//判断是否是修改的数据
+			var tr = $(obj).closest("tr");
+			if (tr.find("td:eq(0)").html())
+				_data["id"] = tr.find("td:eq(0)").html();
+			//发送到后台处理
+			//var url="ApiDemo.SaveTestNote.api?lang={$lang}";
+			aj2014({
+				_c: 'ApiDemo',
+				_m: "SaveTestNote",
+				_p: _data,
+				onCallback: function(o) {
+					if (o.STS) {//保存成功
+						//完了更新列表
+						ListTestNote();
+					} else {//保存失败提示
+						var _msg = o.errmsg ? o.errmsg : "Error!";
+						alert(_msg);
+					}
+				}
+			});
+		}
+		var OldTr = {};//用于保存修改时原tr的内容。点击取消按钮时可直接取出来重新赋给tr
+		function EditRow(obj) {
+			var tr = $(obj).closest("tr");
+			var tds = tr.find("td");
+			var name_a = ["id","note_key", 'note_remark'];
+			//提前把修改前的tr保存到全局变量。为cancel做准备
+			OldTr[tr.find("td:eq(0)").html()] = tr.html();
+			//遍历tds。把文字变成input输入框
+			for (var i in tds) {
+				if (i == tds.length - 1) {//最后的td为操作列。故特殊处理
+					tds[i].innerHTML = "<input type='button' value='Save' onclick='SaveTestNote(this)'/><input type='button' value='Cancel' onclick='Cancel(this);'/>";
+					continue;
+				}
+				if (i === "0") {//id不能修改
+					continue;
+				}
+				var value = tds[i].innerHTML;
+				tds[i].innerHTML = "<input type='text' value='" + value + "' name='" + name_a[i] + "' id='" + name_a[i] + "'/>";
+			}
+		}
+		function DeleteRow(obj) {
+			//确认一下是否删除
+			if (!confirm("sure delete?"))
+				return false;
+			var _data = {};
+			//获取删除列的id
+			var tr = $(obj).closest("tr");
+			_data["id"] = tr.find("td:eq(0)").html();
+			aj2014({
+				_c: 'ApiDemo',
+				_m: "DeleteTestNote",
+				_p: _data,
+				onCallback: function(o) {
+					if (o.STS == "OK") {//保存成功
+						ListTestNote();
+					} else {//保存失败提示
+						var _msg = o.errmsg ? o.errmsg : "Error!";
+						alert(_msg);
+					}
+				}
+			});
+		}
+		//通用的取消方法
+		function Cancel(obj) {
+			var tr = $(obj).closest("tr");
+			if (OldTr[tr.find("td:eq(0)").html()]) {
+				tr.html(OldTr[tr.find("td:eq(0)").html()]);
+			} else {
+				tr.remove();
+			}
+		}
+		var _callback_dlg_default= function (STS,o) {
+		if (STS == 'OK') {
+			//$(grid_user).trigger("GridAction", {a: null, action: "Reload"});
+			$("#btnListNew").trigger('click');
+		}
+	}
+		$("#btnListNew").on("click", function() {
+			grid_user.reload();
+		});
+	</script>
+</body>

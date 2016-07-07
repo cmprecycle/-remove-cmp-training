@@ -1,0 +1,69 @@
+<!--<!DOCTYPE html>-->
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Auto Height for Layout - jQuery EasyUI Demo</title>
+		<style>
+			html,body{
+				width:100%;
+				padding:0px;margin:0px;
+				overflow:hidden;
+			}
+			*{ padding:0px; margin:0px;}
+		</style>
+	</head>
+	<body>
+		<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
+			<tr>
+				<td style="margin:0px;padding:0px;">
+					<div id="cc" style="width:100%;height:100%;">
+						<div data-options="region:'north'" _style="height:50px">menu_1</div>
+						<div data-options="region:'south'" style="height:20px;">status</div>
+						<div data-options="region:'west'" style="width:160px;"><div style="width:100%;height:100%;">menu_2</div></div>
+						<div data-options="region:'center'" _style="padding:20px">
+							<p>Panel Content.</p>
+							<p>Panel Content.</p>
+							<p>Panel Content.</p>
+							<p>Panel Content.</p>
+							<p>Panel Content.</p>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+		<link rel="stylesheet" type="text/css" href="../../themes/default/easyui.css">
+		<link rel="stylesheet" type="text/css" href="../../themes/icon.css">
+		<script type="text/javascript" src="../../jquery.min.js"></script>
+		<script type="text/javascript" src="../../jquery.easyui.min.js"></script>
+		<script type="text/javascript">
+			function getVisibleHeight(){
+				return (document.all)?(document.getElementsByTagName("html")[0].offsetHeight):(window.innerHeight);
+			}
+			function addItem(){
+				$('#cc').layout('panel','center').append('<p>More Panel Content.</p>');
+				//setHeight();
+			}
+
+			function removeItem(){
+				$('#cc').layout('panel','center').find('p:last').remove();
+				//setHeight();
+			}
+
+			function setHeight(){
+				var c = $('#cc');
+				var p = c.layout('panel','center');	// get the center panel
+				var oldHeight = p.panel('panel').outerHeight();
+				//p.panel('resize', {height:'auto'});
+				var newHeight = p.panel('panel').outerHeight();
+				c.layout('resize',{
+					height:getVisibleHeight()
+					//	height: (c.height() + newHeight - oldHeight)
+				});
+			}
+
+			$('#cc').layout({
+				height:getVisibleHeight()
+			});
+		</script>
+	</body>
+</html>

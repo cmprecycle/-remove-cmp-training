@@ -1,0 +1,224 @@
+    function initKeylen() {
+        if (isset($_REQUEST['phprpc_keylen'])) {
+            $this->keylen = (int)$this->getRequest('phprpc_keylen');
+        }
+        else if (isset($_SESSION[$this->cid])) {
+            $session = unserialize(base64_decode($_SESSION[$this->cid]));
+            if (isset($session['keylen'])) {
+                $this->keylen = $session['keylen'];                
+            }
+            else {
+                $this->keylen = 128;
+            }
+        }
+        else {
+            $this->keylen = 128;
+        }
+    }
+		
+    function keyExchange() {
+        require_once('bigint.php');
+        $this->initKeylen();
+        if (isset($_SESSION[$this->cid])) {
+            $session = unserialize(base64_decode($_SESSION[$this->cid]));
+        }
+        else {
+            $session = array();
+        }        
+        if ($this->encrypt === true) {
+            require_once('dhparams.php');
+            $DHParams = new DHParams($this->keylen);
+            $this->keylen = $DHParams->getL();
+            $encrypt = $DHParams->getDHParams();
+            $x = bigint_random($this->keylen - 1, true);
+            $session['x'] = bigint_num2dec($x);
+            $session['p'] = $encrypt['p'];
+            $session['keylen'] = $this->keylen;
+            $encrypt['y'] = bigint_num2dec(bigint_powmod(bigint_dec2num($encrypt['g']), $x, bigint_dec2num($encrypt['p'])));
+            $this->buffer .= "phprpc_encrypt=\"" . $this->encodeString(serialize_fix($encrypt)) . "\";\r\n";
+            if ($this->keylen != 128) {
+                $this->buffer .= "phprpc_keylen=\"{$this->keylen}\";\r\n";
+            }
+            $this->sendURL();
+        }
+        else {
+            $y = bigint_dec2num($this->encrypt);
+            $x = bigint_dec2num($session['x']);
+            $p = bigint_dec2num($session['p']);
+            $key = bigint_powmod($y, $x, $p);
+            if ($this->keylen == 128) {
+                $key = bigint_num2str($key);
+            }
+            else {
+                $key = pack('H*', md5(bigint_num2dec($key)));
+            }
+            $session['key'] = str_pad($key, 16, "\0", STR_PAD_LEFT);
+        }
+        $_SESSION[$this->cid] = base64_encode(serialize($session));
+        $this->sendCallback();
+    }
+
+    function _key_exchange() {
+        if (!is_null($this->_key) || ($this->_encryptMode == 0)) return true;
+        $request = "phprpc_encrypt=true&phprpc_keylen={$this->_keylen}";
+        $result = $this->_post($request);
+        if (is_a($result, 'PHPRPC_Error')) {
+            return $result;
+        }
+        if (array_key_exists('phprpc_keylen', $result)) {
+            $this->_keylen = (int)$result['phprpc_keylen'];
+        }
+        else {
+            $this->_keylen = 128;
+        }
+        if (array_key_exists('phprpc_encrypt', $result)) {
+            $encrypt = unserialize(base64_decode($result['phprpc_encrypt']));
+            require_once('bigint.php');
+            require_once('xxtea.php');
+            $x = bigint_random($this->_keylen - 1, true);
+            $key = bigint_powmod(bigint_dec2num($encrypt['y']), $x, bigint_dec2num($encrypt['p']));
+            if ($this->_keylen == 128) {
+                $key = bigint_num2str($key);
+            }
+            else {
+                $key = pack('H*', md5(bigint_num2dec($key)));
+            }
+            $this->_key = str_pad($key, 16, "\0", STR_PAD_LEFT);
+            $encrypt = bigint_num2dec(bigint_powmod(bigint_dec2num($encrypt['g']), $x, bigint_dec2num($encrypt['p'])));
+            $request = "phprpc_encrypt=$encrypt";
+            $result = $this->_post($request);
+            if (is_a($result, 'PHPRPC_Error')) {
+                return $result;
+            }
+        }
+        else {
+            $this->_key = NULL;
+            $this->_encryptMode = 0;
+        }
+        return true;
+    }
+
+======================
+            function keyExchange() {
+                if (m_keyExchanging) return;
+                if (m_key == null && m_encryptMode > 0) {
+                    m_keyExchanging = true;
+                    if (m_ajax) {
+                        var xmlhttp = createXMLHttp();
+                        var xmlhttpDone = false;
+                        xmlhttp.onreadystatechange = function () {
+                            if (xmlhttp.readyState == 4 && !xmlhttpDone) {
+                                xmlhttpDone = true;
+                                if (xmlhttp.responseText) {
+                                    var id = createID();
+                                    createDataObject(xmlhttp.responseText, id);
+                                    keyExchange2(id);
+                                    deleteDataObject(id);
+                                }
+                                xmlhttp = null;
+                            }
+                        }
+                        xmlhttp.open('GET', m_serverURL + 'phprpc_encrypt=true&phprpc_encode=false&phprpc_keylen=' + m_keyLength, true);
+                        if (m_username !== null) {
+                            xmlhttp.setRequestHeader('Authorization', 'Basic ' + btoa(m_username + ':' + m_password));
+                        }
+                        xmlhttp.send(null);
+                    }
+                    else {
+                        var id = createID();
+                        var callback = btoa((m_clientName + ".__keyExchange('" + id + "');").toUTF8());
+                        var request = 'phprpc_encrypt=true&phprpc_encode=false&phprpc_keylen=' + m_keyLength + '&phprpc_callback=' + callback;
+                        appendScript(id, request);
+                    }
+                }
+                else {
+                    keyExchanged();
+                }
+            }
+
+            function keyExchange2(id) {
+                if (typeof(m_dataObject[id].phprpc_url) != "undefined") {
+                    initURL(m_dataObject[id].phprpc_url);
+                }
+                var data = m_dataObject[id];
+                if (typeof(data.phprpc_encrypt) == 'undefined') {
+                    m_key = null;
+                    m_encryptMode = 0;
+                    m_keyExchanging = false;
+                    keyExchanged();
+                }
+                else {
+                    if (typeof(data.phprpc_keylen) != 'undefined') {
+                        m_keyLength = parseInt(data.phprpc_keylen);
+                    }
+                    else {
+                        m_keyLength = 128;
+                    }
+                    var encrypt = getKey(m_php.unserialize(data.phprpc_encrypt));
+                    var xmlhttp = createXMLHttp();
+                    var xmlhttpDone = false;
+                    xmlhttp.onreadystatechange = function () {
+                        if (xmlhttp.readyState == 4 && !xmlhttpDone) {
+                            xmlhttpDone = true;
+                            m_keyExchanging = false;
+                            keyExchanged();
+                            xmlhttp = null;
+                        }
+                    }
+                    xmlhttp.open('GET', m_serverURL + 'phprpc_encode=false&phprpc_encrypt=' + encrypt, true);
+                    if (m_username !== null) {
+                        xmlhttp.setRequestHeader('Authorization', 'Basic ' + btoa(m_username + ":" + m_password));
+                    }
+                    xmlhttp.send(null);
+                }
+            }
+
+            function getKey(encrypt) {
+                var p = m_bigint.dec2num(encrypt['p']);
+                var g = m_bigint.dec2num(encrypt['g']);
+                var y = m_bigint.dec2num(encrypt['y']);
+                var x = m_bigint.rand(m_keyLength - 1, 1);
+                var key = m_bigint.powmod(y, x, p);
+                if (m_keyLength == 128) {
+                    key = m_bigint.num2str(key);
+                    var n = 16 - key.length;
+                    var k = [];
+                    for (var i = 0; i < n; i++) {
+                        k[i] = '\0';
+                    }
+                    k[n] = key;
+                    m_key = k.join('');
+                }
+                else {
+                    m_key = m_bigint.num2dec(key).md5();
+                }
+                return m_bigint.num2dec(m_bigint.powmod(g, x, p));
+            }
+
+            function keyExchanged() {
+                while (m_taskQueue.length > 0) {
+                    var task = m_taskQueue.shift();
+                    if (typeof(task) == 'function') {
+                        task();
+                    }
+                }
+            }
+
+            function encryptString(string, encrypt, level) {
+                if ((m_key != null) && (encrypt >= level)) {
+                    string = m_xxtea.encrypt(string, m_key);
+                }
+                return string;
+            }
+
+            function decryptString(string, encrypt, level) {
+                if ((m_key != null) && (encrypt >= level)) {
+                    string = m_xxtea.decrypt(string, m_key);
+                }
+                return string;
+            }
+
+            var m_xxtea    = XXTEA;
+            var m_bigint   = BigInteger;
+            //var m_php      = PHPSerializer;
+
