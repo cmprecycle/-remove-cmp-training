@@ -1,0 +1,221 @@
+<!doctype html><html><head><meta http-equiv="Content-type" content="text/html; charset=utf-8"><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="format-detection" content="telephone=no,email=no"/><meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black" /></head><body>
+<!--
+<div class="pure-g">
+	<div class="pure-u-1-3">
+		<form class="pure-form">
+			<fieldset>
+				<legend>A Stacked Form</legend>
+
+				<label for="email">Email</label> <input id="email" type="email" placeholder="Email"><br/>
+
+				<label for="password">Password</label> <input id="password" type="password" placeholder="Password"><br/>
+
+				<label for="state">State</label> <select id="state">
+					<option>AL</option>
+					<option>CA</option>
+					<option>IL</option>
+				</select>
+
+				<label for="remember" class="pure-checkbox">
+					<input id="remember" type="checkbox"> Remember me
+				</label>
+
+				<button type="submit" class="pure-button pure-button-primary">Sign in</button>
+			</fieldset>
+		</form>
+	</div>
+	<div class="pure-u-1-3"><p>Thirds</p></div>
+	<div class="pure-u-1-3"><p>Thirds</p></div>
+</div>
+<form class="pure-form">
+	<fieldset class="pure-group">
+		<input type="text" class="pure-input-1-2" placeholder="Username">
+		<input type="text" class="pure-input-1-2" placeholder="Password">
+		<input type="email" class="pure-input-1-2" placeholder="Email">
+	</fieldset>
+
+	<fieldset class="pure-group">
+		<input type="text" class="pure-input-1-2" placeholder="A title">
+		<textarea class="pure-input-1-2" placeholder="Textareas work too"></textarea>
+	</fieldset>
+
+	<button type="submit" class="pure-button pure-input-1-2 pure-button-primary">Sign in</button>
+</form>				
+-->
+<style>
+.content-head {
+	background-color: #2175bc;
+	height: 2em;
+}
+#bgimgdiv{
+	z-index:-1;
+	/*
+	background: url("./bg5.jpg");
+	background-size: cover;
+	background-position: center;
+	background-color: #000000;
+	*/
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+.content-head a {
+	text-decoration: none;
+	color: #FFF;
+	text-align: center;
+	padding-top: 0.4em;
+	/*
+	*/
+}
+.content-list {
+	margin-top: 2.3em;
+	/*
+	box-shadow: 0px 0px 8px #999;
+	*/
+	box-shadow: 0px 0px 8px #999;
+}
+.content-list .day {
+	padding:0.5em;
+}
+.content-list .day .time-title {
+	border: 1px solid #cccccc;
+	width: 7em;
+}
+.content-list .day .time-title a {
+	text-decoration:none;
+}
+.content-list .day .title {
+	border-left-style: solid;
+	border-left-color: #2175bc;
+	font-size: 1.4em;
+	margin:0.2em;
+}
+.content-list .day .summary {
+	word-wrap: break-word;
+	word-break: break-all;
+	color: #444;
+	font-size: 1em;
+}
+.content-list .day .posted {
+	border-bottom: 1px dashed #E8E7D0;
+	font-size: 0.8em;
+	text-align: right;
+}
+.content-footer {
+	text-align: center;
+	font-size: 14px;
+	color: #999;
+}
+.mycbx{ width: 36px; height: 36px; /* background: url('http://www.gravatar.com/avatar/a2614a382fe86e0f69c1beb27182a63b?s=32&d=identicon&r=PG'); */ }
+.mycbx:checked { /* background: url('http://www.gravatar.com/avatar/330084e6f83101ec352f5f156b56508e?s=32&d=identicon&r=PG'); */ }
+</style>
+<div class="pure-g">
+	<div class="pure-u-1 pure-menu-fixed">
+		<div class="pure-g content-head"> <a href="/" class="pure-u-1-4">首页</a> <a href="/" class="pure-u-1-4">随笔</a> <a href="/" class="pure-u-1-4">联系</a> <a href="/" class="pure-u-1-4">订阅</a> </div>
+	</div>
+	<div class="pure-u-1">
+		<div class="pure-g">
+			<div class="pure-u-1-24"></div>
+			<div class="pure-u-11-12 content-list">
+				<div class="pure-g">
+					<div class="pure-u-1">
+						<form class="pure-form">
+							<fieldset>
+								<legend>A Stacked Form 113</legend>
+
+								<label for="email">Email</label> <input id="email" type="email" placeholder="Email"><br/>
+
+								<label for="password">Password</label> <input id="password" type="password" placeholder="Password"><br/>
+
+								<label for="state">State</label> <select id="state">
+									<option>AL</option>
+									<option>CA</option>
+									<option>IL</option>
+								</select>
+
+								<label for="remember" class="pure-checkbox">
+									<input type="checkbox" id="remember" class="mycbx"> Remember me
+								</label>
+
+								<button type="submit" class="pure-button pure-button-primary">Sign in</button>
+							</fieldset>
+						</form>
+						<div class="day">
+							<div class="time-title"><a href="/">2015年5月6日</a></div>
+							<div class="title">pure css兼容IE</div>
+							<div class="summary">摘要: 目前Pure 0.6.0，太轻量级了，目前全部加起来只有5.5kb，做布局和扩展都很不错。官网：http://purecss.io/阅读全文</div>
+							<div class="posted">posted @漫漫洒洒 阅读(138) 评论(0)</div>
+						</div>
+					</div>
+					<div class="pure-u-1">
+						<input type="checkbox" id="mycheckbox">
+					</div>
+					<div class="pure-u-1">
+					<label for="mycheckbox">Checkbox</label>
+						<div class="day">
+							<div class="time-title"><a href="/">2015年5月6日</a></div>
+							<div class="title">pure css兼容IE</div>
+							<div class="summary">摘要: 目前Pure 0.6.0，太轻量级了，目前全部加起来只有5.5kb，做布局和扩展都很不错。官网：http://purecss.io/阅读全文</div>
+							<div class="posted">posted @漫漫洒洒 阅读(138) 评论(0)</div>
+						</div>
+					</div>
+					<div class="pure-u-1">
+						<div class="day">
+							<div class="time-title"><a href="/">2015年5月6日</a></div>
+							<div class="title">pure css兼容IE</div>
+							<div class="summary">摘要: 目前Pure 0.6.0，太轻量级了，目前全部加起来只有5.5kb，做布局和扩展都很不错。官网：http://purecss.io/阅读全文</div>
+							<div class="posted">posted @漫漫洒洒 阅读(138) 评论(0)</div>
+						</div>
+					</div>
+					<div class="pure-u-1">
+						<div class="day">
+							<div class="time-title"><a href="/">2015年5月6日</a></div>
+							<div class="title">pure css兼容IE</div>
+							<div class="summary">摘要: 目前Pure 0.6.0，太轻量级了，目前全部加起来只有5.5kb，做布局和扩展都很不错。官网：http://purecss.io/阅读全文</div>
+							<div class="posted">posted @漫漫洒洒 阅读(138) 评论(0)</div>
+						</div>
+					</div>
+					<div class="pure-u-1">
+						<div class="day">
+							<div class="time-title"><a href="/">2015年5月6日</a></div>
+							<div class="title">pure css兼容IE</div>
+							<div class="summary">摘要: 目前Pure 0.6.0，太轻量级了，目前全部加起来只有5.5kb，做布局和扩展都很不错。官网：http://purecss.io/阅读全文</div>
+							<div class="posted">posted @漫漫洒洒 阅读(138) 评论(0)</div>
+						</div>
+					</div>
+					<div class="pure-u-1">
+						<div class="day">
+							<div class="time-title"><a href="/">2015年5月6日</a></div>
+							<div class="title">pure css兼容IE</div>
+							<div class="summary">摘要: 目前Pure 0.6.0，太轻量级了，目前全部加起来只有5.5kb，做布局和扩展都很不错。官网：http://purecss.io/阅读全文</div>
+							<div class="posted">posted @漫漫洒洒 阅读(138) 评论(0)</div>
+						</div>
+					</div>
+					<textarea style="height:400px;width:640px"><pre>
+<!--[if lte IE 8]>
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css">
+<![endif]-->
+<!--[if gt IE 8]><!-->
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+<!--<![endif]-->
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/buttons-min.css">
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/forms-min.css">
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/tables-min.css">
+					</pre></textarea>	
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- http://yui.yahooapis.com/pure/0.6.0/pure-min.css
+http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css
+http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css
+-->
+<link rel="stylesheet" href="pure-min.css">
+<!--[if lte IE 8]> <link rel="stylesheet" href="grids-responsive-old-ie-min.css"> <![endif]-->
+<!--[if gt IE 8]><!--> <link rel="stylesheet" href="grids-responsive-min.css"> <!--<![endif]-->
+	

@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>iPhone Style Radios Demo</title>
+  <script src="jquery.1.8.2.min.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="iphone-style-checkboxes.css" type="text/css" media="screen" charset="utf-8" />
+  <script src="iphone-style-checkboxes.js" type="text/javascript" charset="utf-8"></script>
+
+  <script type="text/javascript" charset="utf-8">
+		$(window).load(function() {
+			setTimeout(function(){
+				$('#on_off').iphoneStyle();
+				//$('.disabled :checkbox').iphoneStyle();
+			},3); 
+		});
+  </script>
+  
+</head>
+<body>
+	<input type="checkbox" id="on_off" />
+	<hr/>	
+	<table>
+		<!--
+		<tr class="disabled">
+			<th><label for="disabled">Disabled</label></th>
+			<td>
+				<input type="checkbox" id="disabled" disabled="disabled" />
+			</td>
+		</tr>
+		-->
+		<tr class="on_off">
+			<th><label for="on_off_on">Default On</label></th>
+			<td>
+				<input type="checkbox" checked="checked" id="on_off_on"/>
+			</td>
+		</tr>
+	</table>

@@ -1,0 +1,10 @@
+/* CSS Document */
+
+
+
+.part01-jscrop{padding:0 20px 20px; position:relative; min-height:400px}
+
+.jcrop-handle{font-size:1px;width:7px !important; height:7px !important;	border:1px #eee solid; background-color:#333; *width:9px; *height:9px;}
+.jcrop-tracker{width:100%; height:100%;}
+.jcrop-handle{border-color:black; background-color:#C7BB00; -moz-border-radius:3px; -webkit-border-radius:3px;}
+.crop_preview{position:absolute; left:620px; top:0; width:120px; height:120px; overflow:hidden;}

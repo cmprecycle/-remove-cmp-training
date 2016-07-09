@@ -1,0 +1,36 @@
+<!DOCTYPE html><head><meta charset="utf-8" /><meta name="apple-mobile-web-app-title" content="Loading..." />
+<meta name="viewport" content="target-densitydpi=medium-dpi,width=device-width,initial-scale=1.0,minimum-scale=0.5,maximum-scale=2.0,user-scalable=yes" />
+<meta name="format-detection" content="telephone=no" ><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="white" /></head><body>
+
+<script src="src.namespace.js" desc="命名空间"></script>
+<script src="src.json.js" desc="全局 o2s/s2o 的json短函数, 支持IE6+"></script>
+
+<!--
+<script src="../saas_ace/WapJS.BrowserFingerPrint2.api"></script>
+-->
+<script src="fingerprint2.min.js"></script>
+
+<style>
+	.fileUpload {
+		position: relative;
+		overflow: hidden;
+		margin: 10px;
+	}
+	.fileUpload input.upload {
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin: 0;
+		padding: 0;
+		font-size: 20px;
+		cursor: pointer;
+		opacity: 0;
+		filter: alpha(opacity=0);
+	}
+</style>
+<script>
+	new Fingerprint2().get(function(result, components){
+		alert(o2s(result)); //a hash, representing your device fingerprint
+		//console.log(components); // an array of FP components
+	});
+</script>

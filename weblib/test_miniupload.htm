@@ -1,0 +1,189 @@
+<!DOCTYPE html><head><meta charset="utf-8" /><meta name="apple-mobile-web-app-title" content="Loading..." />
+<meta name="viewport" content="target-densitydpi=medium-dpi,width=device-width,initial-scale=1.0,minimum-scale=0.5,maximum-scale=2.0,user-scalable=yes" />
+<meta name="format-detection" content="telephone=no" ><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="white" /></head><body>
+
+<script src="src.namespace.js" desc="命名空间"></script>
+<script src="src.json.js" desc="全局 o2s/s2o 的json短函数, 支持IE6+"></script>
+<script src="src.cmp.miniupload.js"></script>
+
+<h3>usage -1</h3>
+
+<div class="fileUpload btn btn-primary">
+	<span>Upload</span>
+	<input type="file" class="upload" />
+</div>
+<style>
+	.fileUpload {
+		position: relative;
+		overflow: hidden;
+		margin: 10px;
+	}
+	.fileUpload input.upload {
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin: 0;
+		padding: 0;
+		font-size: 20px;
+		cursor: pointer;
+		opacity: 0;
+		filter: alpha(opacity=0);
+	}
+</style>
+<form method="post" enctype="multipart/form-data" action="javascript:alert('Upload Error');" onSubmmit="alert(111);cmp.miniupload({form:this});">
+	<div id="yourBtn" style="height: 50px; width: 120px;border: 1px dashed #BBB; cursor:pointer;" onclick="ulfile.click()">Click here to upload</div>
+		<!--
+		<input id="upfile" name="upfile" type="file" value="upload" onChange="cmp.miniupload({form:this.form,url:'test_miniupload.php',cb:test_upload_callback});"/>
+		<input id="ulfile" type="file" name="ulfile" onChange="cmp.miniupload({form:this.form,url:'test_miniupload.php',cb:test_upload_callback});"/>
+		-->
+	<div style='height: 30px;width:180px; overflow:hidden;'><input id="ulfile" type="file" name="ulfile" onChange="frmFileUpload_onSubmit(this.form);"/></div>
+	<input type="submit" value="sb" />
+</form>
+
+<h3>usage 0</h3>
+<form method="post" enctype="multipart/form-data" action="javascript:alert('Upload Error');" onSubmmit="alert(222);cmp.miniupload({form:this});">
+<input type="file" name="file" onChange="cmp.miniupload({form:this.form,url:'test_miniupload.php',cb:test_upload_callback});"/>
+</form>
+<hr/>
+<h3>usage 1</h3>
+<form method="post" enctype="multipart/form-data" action="javascript:alert('Upload Error');" onSubmmit="cmp.miniupload({form:this});">
+<input type="file" name="file" onChange="cmp.miniupload({form:this.form,url:'test_miniupload.php',cb:test_upload_callback});" />
+<!--
+<input type="submit" value="Do Upload"/>
+-->
+</form>
+<hr/>
+<h3>usage 2</h3>
+<form method="post" enctype="multipart/form-data" action="javascript:alert('Upload Error');" onSubmmit="cmp.miniupload({form:this});">
+<input type="file" name="file" onChange="cmp.miniupload({form:this.form,url:'test_miniupload.php',cb:test_upload_callback});" />
+<!--
+<input type="submit" value="Do Upload"/>
+-->
+</form>
+<hr/>
+<h3>usage 3</h3>
+<form method="post" enctype="multipart/form-data" action="javascript:alert('Upload Error');" onSubmmit="cmp.miniupload({form:this});">
+<input type="file" name="file" onChange="cmp.miniupload({form:this.form,url:'test_miniupload.php',cb:test_upload_callback});" />
+<!--
+<input type="submit" value="Do Upload"/>
+-->
+</form>
+<hr/>
+<h3>usage 4</h3>
+<form method="post" enctype="multipart/form-data" action="javascript:alert('Upload Error');">
+File Upload:
+<input type="file" name="file" onChange="frmFileUpload_onSubmit(this.form);" />
+</form>
+<hr/>
+<h3>usage 5</h3>
+<form method="post" enctype="multipart/form-data" action="javascript:alert('Upload Error');">
+File Upload:
+<input type="file" name="file" onChange="frmFileUpload_onSubmit(this.form);" />
+</form>
+<hr/>
+<h3>usage 6</h3>
+<form method="post" enctype="multipart/form-data" action="javascript:alert('Upload Error');" onSubmit="return mu.upload(test_upload_callback,this);" >
+File Upload:
+<input type="file" name="file" onChange="frmFileUpload_onSubmit(this.form);" />
+</form>
+<hr/>
+<style>
+	label.myLabel input[type="file"] {
+    position: fixed;
+    top: -1000px;
+}
+/***** Example custom styling *****/
+.myLabel {
+    border: 2px solid #AAA;
+    border-radius: 4px;
+    padding: 2px 5px;
+    margin: 2px;
+    background: #DDD;
+    display: inline-block;
+}
+.myLabel:hover {
+    background: #CCC;
+}
+.myLabel:active {
+    background: #CCF;
+}
+.myLabel :invalid + span {
+    color: #A44;
+}
+.myLabel :valid + span {
+    color: #4A4;
+}
+</style>
+<h3>usage 7</h3>
+<form method="post" enctype="multipart/form-data" action="javascript:alert('Upload Error');" onSubmit="alert(999);return false;return mu.upload(test_upload_callback,this);" >
+<label class="myLabel">
+<!--<input type="file" name="file" required onChange="frmFileUpload_onSubmit(this.form);"/>-->
+<input type="file" name="file" required onChange="btn_upload_change(this);"/>
+<span id="lblUpload">Upload File</span>
+</label>
+</form>
+<!--
+<h3>usage 7</h3>
+<input type="file" name="file" onChange="cmp.miniupload({url:'test_miniupload.php',cb:test_upload_callback});" />
+<h3>usage 8</h3>
+<label class="myLabel">
+    <input type="file" required onChange="btn_upload_change(this);"/>
+    <span id="lblUpload">Upload File</span>
+</label>
+<hr/>
+-->
+<hr/>
+<h3>usage 8</h3>
+<label class="myLabel"><input type="file" name="file" required onChange="btn_upload_change(this);"/>
+<span id="lblUpload">Upload File</span></label>
+<script>
+	//document.writeln(o2s(cmp.miniupload));
+	var muf=namespace('cmp.miniupload');
+	function frmFileUpload_onSubmit(frm){
+		var mu=new muf({form:frm,cb:test_upload_callback,url:"./test_miniupload.php"});
+		return mu.upload(function(raw_s){alert("todo:"+raw_s);},frm);
+	}
+	function test_upload_callback(s){
+		alert("todo callback:"+s);
+		//alert(s);
+		//lblUpload.innerHTML="Upload File";
+	}
+	function btn_upload_change(btn){
+		var _form=btn.form;
+		//frmFileUpload_onSubmit(_form);return;
+
+		//var mu=new muf({form:_form,cb:test_upload_callback,url:"test_miniupload.php"});
+		//return mu.upload(function(raw_s){alert("todo:"+raw_s);},_form);
+
+		var _url="test_miniupload.php";
+
+		//NOTES: 不可以，会导致上传不了.
+		//btn.disabled=true;
+		//setTimeout(function(){
+		//	btn.disabled=false;
+		//},3000);
+
+		var _btn_v=btn.value;
+		if(_btn_v.lastIndexOf('/')>0){
+			filename = _btn_v.substring(_btn_v.lastIndexOf('/')+1);
+			}else{
+			filename = _btn_v.substring(_btn_v.lastIndexOf('\\')+1);
+		}
+		lblUpload.innerHTML="Uploading... "+filename;
+
+		//NOTES这段PASS
+		//var mu=new muf({form:_form,url:"test_miniupload.php"});
+		//mu.upload(function(s){
+		//	alert(s);
+		//	lblUpload.innerHTML="Upload File";
+		//},_form);
+
+		cmp.miniupload({form:_form,url:_url,cb:function(s){
+				alert(_url);
+				alert(s);
+				lblUpload.innerHTML="Upload File";
+		}});
+
+		return false;
+	}
+</script>

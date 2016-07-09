@@ -1,5 +1,5 @@
 <?php
-require_once "../saas_ace/inc.ace.php";
+require_once "../cmp_demo/inc.app.php";
 
 $rt=cmp2015::handleWeb(array(
 	"defaultClass"=>"WebCmpDemo",
